@@ -1,0 +1,114 @@
+site_name: rummikub_solver
+site_url: https://rummikub-solver.readthedocs.io
+repo_url: https://github.com/mjpieters/rummikub-solver
+copyright: Copyright &copy; 2021 - 2025 Martijn Pieters
+
+
+nav:
+  - Home: index.md
+  - Usage: usage.md
+  - API Documentation:
+    - Rulesets: api/ruleset.md
+    - Game state: api/gamestate.md
+    - Tile types: api/tile_types.md
+    - Solving result: api/solving_result.md
+    - Configuration enums: api/configuration_enums.md
+  - Changelog: changes.md
+  - License: license.md
+
+
+theme:
+  name: material
+  favicon: images/favicon.png
+  icon:
+    logo: material/cards-outline
+  features:
+    - content.code.copy
+    - content.tooltips
+    - navigation.instant
+    - navigation.sections
+    - navigation.tracking
+
+
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      primary: orange
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: orange
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+
+extra_css:
+  - css/code_select.css
+
+
+markdown_extensions:
+  - admonition
+  - abbr
+  - attr_list
+  - footnotes
+  - pymdownx.blocks.tab:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.snippets:
+      check_paths: true
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.superfences
+
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            group_by_category: false
+            heading_level: 3
+            members_order: source
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_heading: true
+            show_signature_annotations: true
+            show_source: false
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+            summary: true
+          inventories:
+            - url: https://docs.python.org/3/objects.inv
+              domains: [py, std]
+
+  - search
+  - privacy:
+      enabled: !ENV [CI, false]
+
+watch:
+  - includes/
+  - src/rummikub_solver/
+  - README.md
+  - CHANGELOG.md
+  - LICENSE.txt

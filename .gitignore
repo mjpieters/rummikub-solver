@@ -1,0 +1,10 @@
+__pycache__
+.cache/
+.hypothesis/
+.task/
+.venv/
+dist/
+site/
+.coverage
+.env
+coverage.xml
