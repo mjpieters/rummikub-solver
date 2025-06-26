@@ -87,6 +87,14 @@ jobs:
     - name: Install additional backends (best effort)
       continue-on-error: true
       run: uv sync --all-extras
+    
+    - name: Cache hypothesis database
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        path: .hypothesis/
+        key: cache-hypothesis-${{ runner.os }}-${{ github.run_id }}
+        restore-keys: |
+          cache-hypothesis-
 
     - name: Test with pytest
       run: |
@@ -152,7 +160,7 @@ jobs:
       run: |
         uv build
         rm -f dist/.gitignore  # get-releasenotes can't handle non-dist files here
-        echo "version=$(uvx hatch version) >> $GITHUB_OUTPUT
+        echo "version=$(uvx hatch version)" >> $GITHUB_OUTPUT
 
     - name: Check build
       run: uvx twine check --strict dist/*
@@ -165,7 +173,7 @@ jobs:
         output_file: release_notes.md
         version: ${{ steps.build-dist.outputs.version }}
         start_line: '<!-- changes go below this line -->'
-        head_line: '## \[{version}\] - {date}\)'
+        head_line: '## \[{version}\] - {date}'
         name: Rummikub Solver library
         dist_dir: dist
 
