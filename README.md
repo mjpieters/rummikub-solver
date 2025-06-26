@@ -1,5 +1,5 @@
-[![PyPI version](https://img.shields.io/pypi/v/rummikub-solver.svg)](https://pypi.python.org/project/rummikub-solver)
-[![License](https://img.shields.io/pypi/l/rummikub-solver.svg)](https://github.com/mjpieters/rummikub-solver/blob/main/LICENSE.txt)
+[![PyPI version](https://img.shields.io/pypi/v/rummikub-solver)](https://pypi.python.org/project/rummikub-solver)
+[![License](https://img.shields.io/pypi/l/rummikub-solver)](https://github.com/mjpieters/rummikub-solver/blob/main/LICENSE.txt)
 ![Python versions supported](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fmjpieters%2Frummikub-solver%2Fmain%2Fpyproject.toml)
 [![Built with uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Checked with Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
