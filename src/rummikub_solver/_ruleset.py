@@ -9,10 +9,10 @@ from itertools import chain, combinations, islice, product, repeat
 from typing import TYPE_CHECKING, Annotated, cast
 
 from ._gamestate import GameState
-from ._solver import MILPSolver, RummikubSolver
 from ._types import (
     Colour,
     Joker,
+    MILPSolver,
     Number,
     ProposedSolution,
     SolverMode,
@@ -154,6 +154,8 @@ class RuleSet:
 
     @backend.setter
     def backend(self, backend: MILPSolver | None):
+        from ._solver import RummikubSolver
+
         self._solver = RummikubSolver(self, backend)
 
     @cached_property

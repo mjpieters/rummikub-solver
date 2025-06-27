@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from enum import Enum, auto
+from enum import Enum, StrEnum, auto
 from typing import NamedTuple, Self
+
+from ._utils import enum_docstrings
 
 
 class Colour(Enum):
@@ -120,3 +122,57 @@ class TableArrangement(NamedTuple):
     """
     free_jokers: int
     """Number of free jokers on the table"""
+
+
+@enum_docstrings
+class MILPSolver(StrEnum):
+    """Mixed-integer Linear Programming solver to use."""
+
+    # OSS solvers
+    CBC = "CBC"
+    """COIN-OR (EPL-2.0), <https://github.com/coin-or/CyLP>"""
+
+    GLPK_MI = "GLPK_MI"
+    """GNU Linear Programming Kit (GPL-3.0-only), <https://www.gnu.org/software/glpk/> (via [`cvxopt`](https://pypi.org/p/cvxopt))"""
+
+    HIGHS = "HIGHS"
+    """HiGHS (MIT), <https://highs.dev/> (via [`highspy`](https://pypi.org/p/highspy))"""
+
+    SCIP = "SCIP"
+    """SCIP (Apache-2.0), <https://scipopt.org/> (via [`pyscipopt`](https://pypi.org/p/pyscipopt))"""
+
+    SCIPY = "SCIPY"
+    """SciPy (BSD-3-Clause), <https://scipy.org/>, default solver (built on HiGHS)"""
+
+    # Commercial solvers
+    COPT = "COPT"
+    """COPT (LicenseRef-Proprietary), <https://github.com/COPT-Public/COPT-Release>"""
+
+    CPLEX = "CPLEX"
+    """IBM CPLEX (LicenseRef-Proprietary), <https://www.ibm.com/docs/en/icos>"""
+
+    GUROBI = "GUROBI"
+    """Gurobi (LicenseRef-Proprietary), <https://www.gurobi.com/>"""
+
+    MOSEK = "MOSEK"
+    """Mosek (LicenseRef-Proprietary), <https://www.mosek.com/>"""
+
+    XPRESS = "XPRESS"
+    """Fico XPress, (LicenseRef-Proprietary), <https://www.fico.com/en/products/fico-xpress-optimization>"""
+
+    @classmethod
+    def supported(cls) -> set[Self]:
+        """All currently available solver backends, based on what is installed.
+
+        Returns:
+            All the backends that are currently installed.
+
+        """
+        from cvxpy import installed_solvers
+
+        installed: set[str] = set(installed_solvers())
+        return {member for member in cls if member in installed}
+
+
+# These are tried in order based on what is installed
+DEFAULT_MILP_BACKENDS = (MILPSolver.HIGHS, MILPSolver.SCIPY)
