@@ -31,11 +31,8 @@
       "matchManagers": [
         "pre-commit"
       ],
-      "groupName": [
-        "pre-commit updates"
-      ]
+      "groupName": "pre-commit updates"
     },
-    // Overrides for specific packages
     {
       "description": "Update the renovate pre-commit-hooks once a week at most.",
       "matchPackageNames": [
