@@ -6,10 +6,10 @@ A library to find possible moves for a Rummikub player given the tiles on their 
 
 from ._gamestate import GameState
 from ._ruleset import RuleSet
-from ._solver import MILPSolver
 from ._types import (
     Colour,
     Joker,
+    MILPSolver,
     Number,
     ProposedSolution,
     SolverMode,
