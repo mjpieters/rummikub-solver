@@ -25,6 +25,12 @@
         "devDependencies"
       ],
       "automerge": true
+    },
+    {
+      "description": "Update the renovate pre-commit-hooks once a week at most.",
+      "matchPackageNames": ["renovatebot/pre-commit-hooks"],
+      "automerge": true,
+      "schedule": "* 0-3 * * 1"
     }
   ],
   "platformAutomerge": true
