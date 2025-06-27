@@ -90,6 +90,9 @@ convention = "google"
 pythonVersion = "3.11"
 include = ["src", "tests"]
 strict = ["src", "tests"]
+# When running under pre-commit, tell pyright where to find the project dependencies
+venvPath = "."
+venv = ".venv"
 
 [tool.pytest.ini_options]
 addopts = [
