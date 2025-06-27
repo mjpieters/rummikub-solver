@@ -62,6 +62,13 @@ jobs:
       matrix:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
         python-version: ["3.11", "3.12", "3.13"]
+        include:
+          - extras_best_effort: false
+          - os: macos-latest
+            python-version: 3.13
+            extras_best_effort: true
+          - os: windows-latest
+            extras_best_effort: true
 
     name: Python tests (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -84,10 +91,31 @@ jobs:
     - name: Install dependencies
       run: uv sync
     
-    - name: Install additional backends (best effort)
-      continue-on-error: true
+    - name: Install additional backends
+      if: ${{ ! matrix.extras_best_effort }}
       run: uv sync --all-extras
     
+    - name: Install additional backends (best effort)
+      if: ${{ matrix.extras_best_effort }}
+      env:
+        NO_COLOR: 1
+      shell: bash
+      run: |
+        while read -r -a extra_deps; do
+          extra_name="${extra_deps[0]}"
+          deps=("${extra_deps[@]:1}")
+          echo "::group::Installing $extra_name backend"
+          uv pip install "${deps[@]}" \
+            || IFS=' ' echo "::warning title=Could not install $extra_name solver backend::Failed to install ${deps[*]}"
+          echo "::endgroup::"
+        done < <(
+          # for each extra, output the extra name followed by the listed dependencies, space-separated
+          uvx hatch project metadata \
+          | jq -r '."optional-dependencies" | to_entries[] | "\(.key) \(.value | join(" "))"'
+        )
+
+
+
     - name: Cache hypothesis database
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
       with:
