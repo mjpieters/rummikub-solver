@@ -5,9 +5,17 @@ from collections import Counter
 from itertools import chain, groupby
 from typing import TypedDict
 
+from hypothesis import database, settings
 from hypothesis import strategies as st
 
 from rummikub_solver import GameState, RuleSet, Tile
+
+# On GitHub, save examples between runs (which are then cached)
+settings.register_profile(
+    "ci",
+    parent=settings.get_profile("ci"),
+    database=database.DirectoryBasedExampleDatabase(".hypothesis/examples"),
+)
 
 
 class RuleSetParams(TypedDict):
