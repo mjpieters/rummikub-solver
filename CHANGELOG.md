@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changes go below this line -->
 
+## [1.0.0rc2] - 2025-06-27
+
+### Changed
+
+- Defer importing cvxpy until a ruleset is created or we need to list supported backends.
+
 ## [1.0.0rc1] - 2025-06-26
 
 ### Added
