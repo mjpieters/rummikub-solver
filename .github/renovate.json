@@ -31,7 +31,7 @@
       "matchManagers": [
         "pre-commit"
       ],
-      "groupName": "pre-commit updates",
+      "groupName": "pre-commit updates"
     },
     {
       "description": "Update the renovate pre-commit-hooks once a week at most.",
