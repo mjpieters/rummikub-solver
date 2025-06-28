@@ -1,12 +1,6 @@
 # :material-cards-outline: Rummikub Solver library
 
-A library to find possible moves for a Rummikub player given the tiles on their rack and the table.
-
-## Features
-
-- Can work with different Rummikub rules, letting you adjust the number of colours, tiles, and other aspects
-- You can freely adjust what tiles are on the rack or on the table, within the limits of what tiles are available according to the current rules
-- Can be used with any of the MILP solvers [supported by cvxpy](https://www.cvxpy.org/tutorial/solvers/index.html#choosing-a-solver).
+--8<-- "README.md:intro"
 
 ## Installation
 

@@ -11,7 +11,9 @@
 
 # Rummikub Solver library
 
-A Rummikub solver library, written in Python, to find the best options for placing tiles from a player's rack on to the table.
+<!-- --8<-- [start:intro] -->
+
+Fast and flexible Rummikub solver library, written in Python, to find the best options for placing tiles from a player's rack on to the table.
 
 The algorithm used builds on the approach described by D. Den Hertog, P. B. Hulshof (2006), "Solving Rummikub Problems by Integer Linear Programming", *The Computer Journal, 49(6)*, 665-669 ([DOI 10.1093/comjnl/bxl033](https://doi.org/10.1093/comjnl/bxl033)).
 
@@ -33,6 +35,8 @@ use tiles from your own rack and must place a minimum amount of points before yo
 can use tiles already on the table. This solver is a variant of the original solver
 that maximizes tiles placed, but is constrained by the minimal point amount and
 _disregards_ jokers (which means jokers are only used for the opening meld if that is the only option available).
+
+<!-- --8<-- [end:intro] -->
 
 ## Documentation
 
@@ -106,14 +110,19 @@ to run the console solver. A [Taskfile](https://taskfile.dev/) is provided that 
 ```console
 $ task --list
 task: Available tasks for this project:
-* dev:format:         Runs formatters                                    (aliases: format)
-* dev:lint:           Lint the source code                               (aliases: lint)
-* dev:test:           Run tests                                          (aliases: test)
-* dev:uv-lock:        Updates the uv lock file                           (aliases: lock)
-* dist:build:         Build the distribution packages                    (aliases: dist)
-* dist:clean:         Remove built distribution packages                 (aliases: clean)
-* dist:publish:       Publish package to PyPI                            (aliases: publish)
-* docs:serve:         Live preview server for project documentation      (aliases: preview)
+* default:                     Default task, runs linters and tests
+* dev:format:                  Runs formatters      (aliases: format)
+* dev:install-precommit:       Install pre-commit into local git checkout
+* dev:lint:                    Runs linters      (aliases: lint)
+* dev:lint:code:               Lint the source code
+* dev:lint:renovate:           Lint the Renovate configuration file
+* dev:test:                    Run tests                                          (aliases: test)
+* dev:uv-lock:                 Updates the uv lock file                           (aliases: lock)
+* dist:build:                  Build the distribution packages                    (aliases: dist)
+* dist:clean:                  Remove built distribution packages                 (aliases: clean)
+* dist:publish:                Publish package to PyPI                            (aliases: publish)
+* docs:build:                  Build project documentation                        (aliases: docs)
+* docs:serve:                  Live preview server for project documentation      (aliases: preview)
 ```
 
 ## Credits
