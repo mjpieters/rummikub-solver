@@ -11,7 +11,8 @@
 
 ## Supported MILP solver backends
 
-Each backend, with the exception of [`MILPSolver.SCIPY`] requires additional
+Each backend, with the exception of
+[`MILPSolver.SCIPY`][rummikub_solver.MILPSolver.SCIPY], requires additional
 packages to be installed. See [_Picking an alternative solver
 backend_](../index.md#picking-an-alternative-solver-backend).
 
