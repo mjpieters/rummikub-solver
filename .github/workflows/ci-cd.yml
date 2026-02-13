@@ -61,20 +61,12 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
         include:
           - extras_best_effort: false  # If True, try to install each extra separately and skip those that fail to install
             skip_extras: ''            # JSON array of extras not to install
-          - os: macos-latest
-            python-version: 3.13
-            extras_best_effort: true
           - os: windows-latest
             extras_best_effort: true
-          - os: ubuntu-latest
-            python-version: 3.13
-            # cvxopt wheel for 3.13 is bundled with GLPK 4.65, which has a known bug, see
-            # https://github.com/cvxopt/cvxopt-wheels/issues/8
-            skip_extras: '["glpk-mi"]'
 
     name: Python tests (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
