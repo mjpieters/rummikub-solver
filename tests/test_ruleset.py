@@ -16,6 +16,7 @@ from rummikub_solver import (
     RuleSet,
     SolverMode,
 )
+from tests.utils import either
 
 from .hypothesis import (
     RuleSetParams,
@@ -449,11 +450,12 @@ def test_solve_total_value(ruleset: RuleSet, in_progress_game: GameState) -> Non
     # maximize the total tile value, so we can, at best, include known values
     # for different solvers and use this as a range for any others. The exact
     # sets differ based on the tiles selected.
+    version_dependent = either(515, 589)  # depending on the exact version installed
     expected_tile_sum = {
         MILPSolver.CBC: 515,
-        # MILPSolver.GLPK_MI  is either 515 _or_ 589, depending on the exact version installed.
+        MILPSolver.GLPK_MI: version_dependent,  # depending on the exact version installed
         MILPSolver.SCIPY: 515,
-        MILPSolver.HIGHS: 589,
+        MILPSolver.HIGHS: version_dependent,
         MILPSolver.SCIP: 589,
     }
     if expected := expected_tile_sum.get(ruleset.backend):
@@ -461,9 +463,8 @@ def test_solve_total_value(ruleset: RuleSet, in_progress_game: GameState) -> Non
     else:
         actual = sum(solution.tiles)
         _logger.info(f"{ruleset.backend} produced a solution summing to {actual}")
-        assert (
-            min(expected_tile_sum.values()) <= actual <= max(expected_tile_sum.values())
-        )
+        # be more tolerant of values falling in between the two expected values.
+        assert actual in version_dependent
     assert solution.sets
     assert ruleset.arrange_table(in_progress_game.with_move(*solution.tiles))
     assert_gamestate_solution_invariants(in_progress_game, solution)
