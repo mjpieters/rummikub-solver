@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changes go below this line -->
 
+## [1.1.0] - unreleased
+
+- Upgrade `cvxpy` dependency to 1.8.1 or up, and `cvxopt` to 1.3.3 or up to
+  ensure Python 3.14 compatibility. Note that individual solver backends may
+  still have narrower requirements.
+
 ## [1.0.0] - 2025-06-28
 
 ### Changed
