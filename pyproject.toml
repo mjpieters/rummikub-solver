@@ -102,6 +102,10 @@ addopts = [
     "--cov-report=xml",
     "--no-cov-on-fail",
 ]
+filterwarnings = [
+    # cvxpy sometimes calls numpy.sum() with values that trigger runtime warnings
+    "ignore:(overflow|invalid value) encountered in reduce:RuntimeWarning:numpy._core.fromnumeric"
+]
 
 [tool.coverage.report]
 show_missing = true
