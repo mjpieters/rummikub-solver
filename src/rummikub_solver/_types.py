@@ -132,6 +132,9 @@ class MILPSolver(StrEnum):
     CBC = "CBC"
     """COIN-OR (EPL-2.0), <https://github.com/coin-or/CyLP>"""
 
+    CUOPT = "CUOPT"
+    """cuOpt GPU-accelerated Optimization (Apache-2.0), <https://github.com/NVIDIA/cuopt>"""
+
     GLPK_MI = "GLPK_MI"
     """GNU Linear Programming Kit (GPL-3.0-only), <https://www.gnu.org/software/glpk/> (via [`cvxopt`](https://pypi.org/p/cvxopt))"""
 
@@ -153,6 +156,9 @@ class MILPSolver(StrEnum):
 
     GUROBI = "GUROBI"
     """Gurobi (LicenseRef-Proprietary), <https://www.gurobi.com/>"""
+
+    KNITRO = "KNITRO"
+    """Knitro (LicenseRef-Proprietary), <https://www.artelys.com/knitro/>"""
 
     MOSEK = "MOSEK"
     """Mosek (LicenseRef-Proprietary), <https://www.mosek.com/>"""

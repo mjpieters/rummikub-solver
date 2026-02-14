@@ -70,12 +70,14 @@ You can also install an alternative Open Source solver backends via [extras][]:
 | `glpk_mi` | [GNU Linear Programming Kit](https://www.gnu.org/software/glpk/) | [GPL-3.0-only][gpl-30-only] | Installs the [cvxopt project](https://pypi.org/p/cvxopt) |
 | `highs` | [HiGHS][highs] | [MIT][mit] | Arguably the best OSS MILP solver available. This installs a newer version of HiGHS than what is bundled with SciPy. |
 | `scip` | [SCIP](https://scipopt.org/) | [Apache-2.0][apache-20] | |
+| | [cuOpt][cuopt] GPU-accelerated Optimization | [Apache-2.0][apache-20] | *No extra is provided as installation is more involved* |
 
 You can also pick from a number of commercial solvers; no extras are provided for these:
 
 - `COPT`: Cardinal Optimizer, <https://github.com/COPT-Public/COPT-Release>
 - `CPLEX`: IBM CPLEX, <https://www.ibm.com/docs/en/icos>
 - `GUROBI`: Gurobi Optimizer, <https://www.gurobi.com/>
+- `KNITRO`: <https://www.artelys.com/knitro/>
 - `MOSEK`: <https://www.mosek.com/>
 - `XPRESS`: Fico XPress,, <https://www.fico.com/en/products/fico-xpress-optimization>
 
@@ -92,6 +94,7 @@ When HiGHS is installed, it is automatically used as the default solver.
 [cpsolvers]: https://www.cvxpy.org/tutorial/solvers/index.html#choosing-a-solver
 [highs]: https://highs.dev/
 [extras]: https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras
+[cuopt]: https://github.com/NVIDIA/cuopt/
 
 <!-- --8<-- [end:picking_backend] -->
 
