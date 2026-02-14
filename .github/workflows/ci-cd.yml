@@ -67,6 +67,11 @@ jobs:
             skip_extras: ''            # JSON array of extras not to install
           - os: windows-latest
             extras_best_effort: true
+          - os: ubuntu-latest
+            # cvxopt 1.3.3 wheels for Linux are bundled with GLPK 4.65, which
+            # has a known bug, see
+            # https://github.com/cvxopt/cvxopt-wheels/issues/8
+            skip_extras: '["glpk-mi"]'
 
     name: Python tests (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
