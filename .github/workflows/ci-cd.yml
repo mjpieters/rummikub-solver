@@ -10,27 +10,41 @@ on:
 env:
   FORCE_COLOR: 1
 
-permissions:
-  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
 
 jobs:
   linting:
     runs-on: ubuntu-latest
     name: "Python linting"
+    permissions:
+      contents: read
+    env:
+      UV_FROZEN: true
+
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
+
+    - name: Set up Python 🐍
+      id: python
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      with:
+        python-version-file: "pyproject.toml"
 
     - name: Install uv
       uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7.3.0
       with:
-        enable-cache: true
+        enable-cache: | # zizmor: ignore[cache-poisoning] cache is disabled when publishing to prevent poisoning
+          ${{ github.ref_type == 'tag' && 'false' || 'auto' }}
         cache-dependency-glob: "uv.lock"
+        python-version: ${{ steps.python.outputs.python-path }}
+        activate-environment: true
 
-    - name: Set up Python 🐍
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-      with:
-        python-version-file: "pyproject.toml"
-    
     - name: Check lock is up-to-date
       run: |
         uv lock --check
@@ -38,7 +52,6 @@ jobs:
     - name: Install dependencies
       run: |
         uv sync
-        echo "$PWD/.venv/bin" >> $GITHUB_PATH
 
     - name: Check file formatting
       uses: astral-sh/ruff-action@4919ec5cf1f49eff0871dbcea0da843445b837e6 # v3.6.1
@@ -75,39 +88,56 @@ jobs:
 
     name: Python tests (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      id-token: write  # needed for the codecov actions to obtain a OIDC token
+    env:
+      UV_FROZEN: true
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-    - name: Install uv
-      uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b  # v7.3.0
       with:
-        enable-cache: true
-        cache-dependency-glob: "uv.lock"
-        python-version: ${{ matrix.python-version }}
+        persist-credentials: false
 
     - name: Set up Python ${{ matrix.python-version }} 🐍
+      id: python
       uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: ${{ matrix.python-version }}
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b  # v7.3.0
+      with:
+        enable-cache: | # zizmor: ignore[cache-poisoning] cache is disabled when publishing to prevent poisoning
+          ${{ github.ref_type == 'tag' && 'false' || 'auto' }}
+        cache-dependency-glob: "uv.lock"
+        python-version: ${{ steps.python.outputs.python-path }}
+
     - name: Install dependencies
       run: uv sync
-    
+
     - name: Install additional backends
       if: ${{ ! matrix.extras_best_effort && matrix.skip_extras == '' }}
       run: uv sync --all-extras
-    
+
     - name: Install additional backends (best effort)
       if: ${{ matrix.extras_best_effort || matrix.skip_extras != '' }}
       env:
         NO_COLOR: 1
+        SKIP_EXTRAS: ${{ matrix.skip_extras && matrix.skip_extras || '[]' }}
       shell: bash
       run: |
+        set -eu -o pipefail
+        EXTRAS=$(
+          # for each extra, output the extra name followed by the listed dependencies, space-separated
+          # This pins hatch to 1.15 or older as 1.16 still has issues with how it runs build environments
+          uvx --from 'hatch<1.16' hatch project metadata \
+          | jq --raw-output '."optional-dependencies" | to_entries[] | "\(.key) \(.value | join(" "))"'
+        )
         while read -r -a extra_deps; do
           extra_name="${extra_deps[0]}"
-          if jq --exit-status --null-input --arg extra "${extra_name}" \
-             '${{ matrix.skip_extras && matrix.skip_extras || '[]' }} | contains([$extra])' > /dev/null;
+          if jq --exit-status --null-input --argjson skip_extras "${SKIP_EXTRAS}" --arg extra "${extra_name}" \
+             '$skip_extras | contains([$extra])' > /dev/null;
           then
             echo "NOT installing $extra_name backend"
             continue
@@ -117,11 +147,7 @@ jobs:
           uv pip install "${deps[@]}" \
             || IFS=' ' echo "::warning title=Could not install $extra_name solver backend::Failed to install ${deps[*]}"
           echo "::endgroup::"
-        done < <(
-          # for each extra, output the extra name followed by the listed dependencies, space-separated
-          uvx hatch project metadata \
-          | jq --raw-output '."optional-dependencies" | to_entries[] | "\(.key) \(.value | join(" "))"'
-        )
+        done <<< "$EXTRAS"
 
     - name: Test with pytest
       run: |
@@ -131,13 +157,14 @@ jobs:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        use_oidc: true
 
     - name: Upload test results to Codecov
       if: ${{ !cancelled() }}
-      uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3  # v1.2.1
+      uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        report_type: test_results
+        use_oidc: true
 
   test-summary:
     name: Test matrix status
@@ -156,6 +183,10 @@ jobs:
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      UV_FROZEN: true
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     needs:
       - test-summary
@@ -166,28 +197,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-    - name: Install uv
-      uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7.3.0
       with:
-        enable-cache: true
-        cache-dependency-glob: "uv.lock"
+        persist-credentials: false
 
     - name: Set up Python 🐍
+      id: python
       uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version-file: "pyproject.toml"
 
-    - name: Install dependencies
-      run: |
-        uv sync
+    - name: Install uv
+      uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7.3.0
+      with:
+        enable-cache: false
+        cache-dependency-glob: "uv.lock"
+        python-version: ${{ steps.python.outputs.python-path }}
 
     - name: Build the Python 🐍 binary wheel and source tarball 📦
       id: build-dist
       run: |
         uv build
         rm -f dist/.gitignore  # get-releasenotes can't handle non-dist files here
-        echo "version=$(uvx hatch version)" >> $GITHUB_OUTPUT
+        echo "version=$(uvx hatch version)" >> "$GITHUB_OUTPUT"
 
     - name: Check build
       run: uvx twine check --strict dist/*
@@ -227,6 +258,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
 
     - name: Download Python 🐍 distribution 📦
       uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
