@@ -65,7 +65,7 @@ build-backend = "hatchling.build"
 source = "uv-dynamic-versioning"
 
 [tool.uv]
-required-version = "~=0.7"
+required-version = "~=0.9"
 
 [tool.uv-dynamic-versioning]
 fallback-version = "0.0.0"
