@@ -130,8 +130,9 @@ jobs:
         set -eu -o pipefail
         EXTRAS=$(
           # for each extra, output the extra name followed by the listed dependencies, space-separated
-          # This pins hatch to 1.15 or older as 1.16 still has issues with how it runs build environments
-          uvx --from 'hatch<1.16' hatch project metadata \
+          # This pins hatch to 1.15 or older to work around pypa/hatch#2118, and
+          # virtualenv 20.x or older, to work around pypa/hatch#2193.
+          uvx --from 'hatch<1.16' --with 'virtualenv<21' hatch project metadata \
           | jq --raw-output '."optional-dependencies" | to_entries[] | "\(.key) \(.value | join(" "))"'
         )
         while read -r -a extra_deps; do
@@ -257,10 +258,6 @@ jobs:
       contents: write  # required for creating GH releases
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      with:
-        persist-credentials: false
-
     - name: Download Python 🐍 distribution 📦
       uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
       with:
@@ -270,9 +267,9 @@ jobs:
       uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
 
     - name: GitHub release
-      uses: ncipollo/release-action@b7eabc95ff50cbeeedec83973935c8f306dfcd0b # v1.20.0
-      with:
-        name: Rummikub Solver library ${{ needs.build.outputs.version }}
-        bodyFile: release_notes.md
-        artifacts: dist/*
-        prerelease: ${{ needs.build.outputs.prerelease }}
+      env:
+        RELEASE_TITLE: Rummikub Solver library ${{ needs.build.outputs.version }}
+        PRERELEASE_SWITCH: ${{ case(fromJSON(needs.build.outputs.prerelease), '--prerelease', '') }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+      run: gh release create --title "${RELEASE_TITLE}" --notes-file release_notes.md "${PRERELEASE_SWITCH}" "${GITHUB_REF_NAME}" dist/*
