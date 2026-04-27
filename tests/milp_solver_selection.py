@@ -71,7 +71,7 @@ def pytest_addoption(
 
 
 def pytest_sessionstart(session: pytest.Session) -> None:
-    selected: list[str] = session.config.getoption("solver_backend")
+    selected: list[str] = session.config.getoption("solver_backend") or []
     session.config.stash[SELECTED_BACKENDS] = [
         MILPSolver(name) for name in selected
     ] or [backend for backend in MILPSolver if backend in OSS_BACKENDS]
@@ -90,7 +90,7 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
             metafunc.definition.warn(
                 pytest.PytestCollectionWarning(
                     f"None of the selected solver backends are installed: "
-                    f"{', '.join(metafunc.config.getoption('solver_backend'))}."
+                    f"{', '.join(metafunc.config.getoption('solver_backend') or [])}."
                 )
             )
         metafunc.parametrize(
