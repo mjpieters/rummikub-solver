@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from enum import Enum, StrEnum, auto
-from typing import NamedTuple, Self
+from typing import NamedTuple, Self, cast
 
 from ._utils import enum_docstrings
 
@@ -176,7 +176,7 @@ class MILPSolver(StrEnum):
         """
         from cvxpy import installed_solvers
 
-        installed: set[str] = set(installed_solvers())
+        installed = set(cast(list[str], installed_solvers()))
         return {member for member in cls if member in installed}
 
 
