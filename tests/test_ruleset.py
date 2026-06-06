@@ -456,7 +456,7 @@ def test_solve_total_value(ruleset: RuleSet, in_progress_game: GameState) -> Non
         MILPSolver.GLPK_MI: version_dependent,  # depending on the exact version installed
         MILPSolver.SCIPY: 515,
         MILPSolver.HIGHS: version_dependent,
-        MILPSolver.SCIP: 589,
+        MILPSolver.SCIP: version_dependent,
     }
     if expected := expected_tile_sum.get(ruleset.backend):
         assert sum(solution.tiles) == expected
