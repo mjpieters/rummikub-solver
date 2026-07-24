@@ -163,7 +163,7 @@ class GameState:
             return
         tmap = self._tile_map
         self._rack += Counter(tmap[t] for t in tiles)
-        np.add.at(self._rack_array, np.array(tiles) - 1, 1)
+        np.add.at(self._rack_array, np.array(tiles) - 1, 1)  # pyright: ignore[reportUnknownMemberType]
 
     def remove_rack(self, *tiles: Tile | int) -> None:
         """Remove tiles from the rack.
@@ -180,7 +180,7 @@ class GameState:
         tmap = self._tile_map
         self._rack -= Counter(tmap[t] for t in tiles)
         rack = self._rack_array
-        np.subtract.at(rack, np.array(tiles) - 1, 1)
+        np.subtract.at(rack, np.array(tiles) - 1, 1)  # pyright: ignore[reportUnknownMemberType]
         rack[rack < 0] = 0  # in case we removed tiles not on the rack
 
     def add_table(self, *tiles: Tile | int) -> None:
@@ -196,7 +196,7 @@ class GameState:
             return
         tmap = self._tile_map
         self._table += Counter(tmap[t] for t in tiles)
-        np.add.at(self._table_array, np.array(tiles) - 1, 1)
+        np.add.at(self._table_array, np.array(tiles) - 1, 1)  # pyright: ignore[reportUnknownMemberType]
 
     def remove_table(self, *tiles: Tile | int) -> None:
         """Remove tiles from the table.
@@ -213,7 +213,7 @@ class GameState:
         tmap = self._tile_map
         self._table -= Counter(tmap[t] for t in tiles)
         table = self._table_array
-        np.subtract.at(table, np.array(tiles) - 1, 1)
+        np.subtract.at(table, np.array(tiles) - 1, 1)  # pyright: ignore[reportUnknownMemberType]
         table[table < 0] = 0  # in case we removed tiles not on the table
 
     def __eq__(self, other: object) -> bool:

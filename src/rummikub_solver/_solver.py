@@ -44,11 +44,11 @@ class RummikubSolver:
         # a given set. Each column is a set, each row a tile
         slen = len(ruleset.sets)
         smatrix = np.zeros((ruleset.tile_count, slen), dtype=np.uint8)
-        np.add.at(
+        np.add.at(  # pyright: ignore[reportUnknownMemberType]
             smatrix,
             (
                 np.fromiter(chain.from_iterable(ruleset.sets), np.uint8) - 1,
-                np.repeat(
+                np.repeat(  # pyright: ignore[reportUnknownMemberType]
                     np.arange(slen), np.fromiter(map(len, ruleset.sets), np.uint16)
                 ),
             ),
@@ -102,11 +102,11 @@ class RummikubSolver:
         p[SolverMode.TILE_COUNT] = cp.Problem(cp.Maximize(cp.sum(tiles)), constraints)  # type: ignore[reportUnknownMemberType]
 
         # Problem solver maximising the total value of tiles placed
-        tilevalue = np.tile(
+        tilevalue = np.tile(  # pyright: ignore[reportUnknownMemberType]
             np.arange(ruleset.numbers, dtype=np.uint16) + 1, ruleset.colours
         )
         if ruleset.jokers:
-            tilevalue = np.append(tilevalue, 0)
+            tilevalue = np.append(tilevalue, 0)  # pyright: ignore[reportUnknownMemberType]
         p[SolverMode.TOTAL_VALUE] = cp.Problem(
             cp.Maximize(cp.sum(tiles[:, np.newaxis] @ tilevalue[np.newaxis, :])),  # type: ignore[reportUnknownMemberType]
             constraints,
@@ -166,12 +166,12 @@ class RummikubSolver:
         tiles = np.rint(self.tiles.value).astype(int)
         (tidx,) = tiles.nonzero()
         # add 1 to the indices to get tile numbers
-        selected_tiles = np.repeat(tidx + 1, tiles[tidx]).tolist()
+        selected_tiles = np.repeat(tidx + 1, tiles[tidx]).tolist()  # pyright: ignore[reportUnknownMemberType]
 
         if TYPE_CHECKING:
             assert self.sets.value is not None
         sets = np.rint(self.sets.value).astype(int)
         (sidx,) = sets.nonzero()
-        selected_sets = np.repeat(sidx, sets[sidx]).tolist()
+        selected_sets = np.repeat(sidx, sets[sidx]).tolist()  # pyright: ignore[reportUnknownMemberType]
 
         return SolverSolution(selected_tiles, selected_sets)
