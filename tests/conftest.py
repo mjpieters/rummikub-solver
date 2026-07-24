@@ -6,7 +6,7 @@ import pytest
 
 from rummikub_solver import GameState, MILPSolver, RuleSet
 
-from .milp_solver_selection import *  # noqa: F403
+from .milp_solver_selection import *
 
 if TYPE_CHECKING:
     # Define the (virtual) solver_backend fixture in type checking terms,

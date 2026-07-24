@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Iterable, Sequence
-from typing import Any
 
 import numpy as np
 
@@ -217,7 +216,7 @@ class GameState:
         np.subtract.at(table, np.array(tiles) - 1, 1)
         table[table < 0] = 0  # in case we removed tiles not on the table
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, GameState):  # pragma: no cover
             return NotImplemented
         return (self._initial, self._rack, self._table) == (
