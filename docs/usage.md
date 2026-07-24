@@ -61,6 +61,7 @@ the player has made their initial move yet.
 
 You can add and remove tiles from both the rack and the table:
 
+<!-- fmt: off -->
 ```pycon
 >>> from rummikub_solver import RuleSet
 >>> ruleset = RuleSet()
@@ -77,6 +78,7 @@ You can add and remove tiles from both the rack and the table:
 >>> game.add_table(black[10], orange[10], red[10], joker)
 >>> game.remove_table(joker)
 ```
+<!-- fmt: on -->
 
 You can then introspect their states as either a counter or a sorted list:
 

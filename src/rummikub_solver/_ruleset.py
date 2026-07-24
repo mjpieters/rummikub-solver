@@ -467,14 +467,12 @@ class RuleSet:
         # jokers. For groups, do not generate further combinations for longer sets, as
         # these would leave jokers free for the next player to take. For runs
         # only generate 'inner' jokers.
-        longer: Callable[[Sequence[Tile]], Iterable[tuple[Tile, ...]]] = lambda s: [  # noqa: E731
+        longer: Callable[[Sequence[Tile]], Iterable[tuple[Tile, ...]]] = lambda s: [
             tuple(s)
         ]
         if runs:
-            longer = (  # noqa: E731
-                lambda s: (
-                    (s[0], *c, s[-1]) for c in combinations([*s[1:-1], *js], len(s) - 2)
-                )
+            longer = lambda s: (
+                (s[0], *c, s[-1]) for c in combinations([*s[1:-1], *js], len(s) - 2)
             )
         js = [j] * self._jokers
         comb = (

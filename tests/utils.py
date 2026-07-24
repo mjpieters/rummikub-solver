@@ -11,7 +11,7 @@ class either:
 
     __hash__ = None  # pyright: ignore[reportAssignmentType]
 
-    def __eq__(self, actual: Any) -> bool:
+    def __eq__(self, actual: object) -> bool:
         return actual == self.a or actual == self.b
 
     def __repr__(self) -> str:
