@@ -58,7 +58,7 @@ Issues = "https://github.com/mjpieters/rummikub-solver/issues"
 Changelog = "https://github.com/mjpieters/rummikub-solver/blob/main/CHANGELOG.md"
 
 [build-system]
-requires = ["hatchling~=1.27", "uv-dynamic-versioning~=0.8"]
+requires = ["hatchling>=1.31.0,<1.32.0", "uv-dynamic-versioning>=0.14.0,<0.15.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
@@ -66,6 +66,13 @@ source = "uv-dynamic-versioning"
 
 [tool.uv]
 required-version = "~=0.9"
+# Ensure that uv rebuilds the project when git commit or tags change
+# to update the version
+cache-keys = [
+    { file = "pyproject.toml" },
+    { git = { commit = true, tags = true } },
+    { env = "UV_DYNAMIC_VERSIONING_BYPASS" }
+]
 
 [tool.uv-dynamic-versioning]
 fallback-version = "0.0.0"
