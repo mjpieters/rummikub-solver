@@ -120,6 +120,11 @@ jobs:
       if: ${{ ! matrix.extras_best_effort && matrix.skip_extras == '' }}
       run: uv sync --all-extras
 
+    # Work around actions/runner-images#7443 and install yq on windows runners
+    - name: Make yq tool available on Windows runners
+      if: "matrix.os == 'windows-latest'"
+      run: choco install yq --version 4.53.3
+
     - name: Install additional backends (best effort)
       if: ${{ matrix.extras_best_effort || matrix.skip_extras != '' }}
       env:
@@ -130,10 +135,12 @@ jobs:
         set -eu -o pipefail
         EXTRAS=$(
           # for each extra, output the extra name followed by the listed dependencies, space-separated
-          # This pins hatch to 1.15 or older to work around pypa/hatch#2118, and
-          # virtualenv 20.x or older, to work around pypa/hatch#2193.
-          uvx --from 'hatch<1.16' --with 'virtualenv<21' hatch project metadata \
-          | jq --raw-output '."optional-dependencies" | to_entries[] | "\(.key) \(.value | join(" "))"'
+          yq --output-format=yaml '
+              .project.optional-dependencies
+            | to_entries[]
+            | .value |= join(" ")
+            | "\(.key) \(.value)"
+          ' pyproject.toml
         )
         while read -r -a extra_deps; do
           extra_name="${extra_deps[0]}"
@@ -220,10 +227,10 @@ jobs:
       run: |
         uv build
         rm -f dist/.gitignore  # get-releasenotes can't handle non-dist files here
-        echo "version=$(uvx hatch version)" >> "$GITHUB_OUTPUT"
+        echo "version=$(uvx uv-dynamic-versioning@0.14.0)" >> "$GITHUB_OUTPUT"
 
     - name: Check build
-      run: uvx twine check --strict dist/*
+      run: uvx twine@7.0.0 check --strict dist/*
 
     - name: Prepare Release Note
       id: note
