@@ -9,6 +9,13 @@ on:
 
 env:
   FORCE_COLOR: 1
+  # renovate: datasource=nuget depName=yq
+  YQ_VERSION: 4.53.3
+  # renovate: datasource=pypi depName=uv-dynamic-versioning
+  UV_DYNAMIC_VERSIONING_VERSION: 0.14.0
+  # renovate: datasource=pypi depName=twine
+  TWINE_VERSION: 7.0.0
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -122,8 +129,8 @@ jobs:
 
     # Work around actions/runner-images#7443 and install yq on windows runners
     - name: Make yq tool available on Windows runners
-      if: "matrix.os == 'windows-latest'"
-      run: choco install yq --version 4.53.3
+      if: ${{ matrix.os == 'windows-latest' && (matrix.extras_best_effort || matrix.skip_extras == '') }}
+      run: choco install yq --version "$YQ_VERSION"
 
     - name: Install additional backends (best effort)
       if: ${{ matrix.extras_best_effort || matrix.skip_extras != '' }}
@@ -227,10 +234,10 @@ jobs:
       run: |
         uv build
         rm -f dist/.gitignore  # get-releasenotes can't handle non-dist files here
-        echo "version=$(uvx uv-dynamic-versioning@0.14.0)" >> "$GITHUB_OUTPUT"
+        echo "version=$(uvx uv-dynamic-versioning@"$UV_DYNAMIC_VERSIONING_VERSION")" >> "$GITHUB_OUTPUT"
 
     - name: Check build
-      run: uvx twine@7.0.0 check --strict dist/*
+      run: uvx twine@"$TWINE_VERSION" check --strict dist/*
 
     - name: Prepare Release Note
       id: note
