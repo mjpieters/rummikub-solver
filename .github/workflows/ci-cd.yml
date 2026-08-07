@@ -167,7 +167,7 @@ jobs:
     - name: Test with pytest
       run: |
         # codecov requires that the test results are shared in xunit1 / legacy format.
-        uv run pytest -v --junitxml=junit.xml -o junit_family=legacy
+        uv run pytest -v --junitxml=junit.xml -o junit_family=legacy --durations=10 --durations-min=1.0
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
