@@ -130,7 +130,7 @@ jobs:
     # Work around actions/runner-images#7443 and install yq on windows runners
     - name: Make yq tool available on Windows runners
       if: ${{ matrix.os == 'windows-latest' && (matrix.extras_best_effort || matrix.skip_extras == '') }}
-      run: choco install yq --version "$YQ_VERSION"
+      run: choco install yq --version "$YQ_VERSION" || exit 1
 
     - name: Install additional backends (best effort)
       if: ${{ matrix.extras_best_effort || matrix.skip_extras != '' }}
