@@ -37,6 +37,7 @@ scip = ["PySCIPOpt"]
 [dependency-groups]
 dev = [
     "annotated-types>=0.7.0",
+    "prek>=0.4.12",
     "ruff>=0.16",
     "pyright",
     "pytest>=8.4.0",
@@ -92,9 +93,6 @@ convention = "google"
 pythonVersion = "3.11"
 include = ["src", "tests"]
 strict = ["src", "tests"]
-# When running under pre-commit, tell pyright where to find the project dependencies
-venvPath = "."
-venv = ".venv"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -125,4 +123,3 @@ source = [
 
 [tool.coverage.xml]
 output = "coverage.xml"
-

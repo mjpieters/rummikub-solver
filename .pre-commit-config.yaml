@@ -3,31 +3,64 @@ default_install_hook_types:
 - post-checkout
 - post-merge
 - post-rewrite
+priorities:
+  # note: formatters can't run in parallel
+  setup: 0
+  format-eof: 10
+  format-trailing-whitespace: 11
+  format-ruff: 12
+  checks: 20
+
 repos:
-- repo: https://github.com/astral-sh/uv-pre-commit
-  rev: 0.12.10
-  hooks:
-  - id: uv-lock
-  - id: uv-sync
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.16.6
-  hooks:
-  - id: ruff-format
-    types_or: [python, pyi, jupyter, markdown]
-  - id: ruff-check
-- repo: https://github.com/RobertCraigie/pyright-python
-  rev: v1.1.411
-  hooks:
-  - id: pyright
-- repo: https://github.com/renovatebot/pre-commit-hooks
-  rev: 44.65.5
-  hooks:
-  - id: renovate-config-validator
-- repo: https://github.com/zizmorcore/zizmor-pre-commit
-  rev: v1.30.0
-  hooks:
-  - id: zizmor
-- repo: https://github.com/rhysd/actionlint
-  rev: v1.7.12
-  hooks:
-  - id: actionlint
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.12.10
+    hooks:
+      - id: uv-lock
+        priority: setup
+      - id: uv-sync
+        priority: setup
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.6
+    hooks:
+      - id: ruff-format
+        types_or: [python, pyi, jupyter, markdown]
+        priority: format-ruff
+      - id: ruff-check
+        priority: checks
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.411
+    hooks:
+      - id: pyright
+        args: [--pythonpath, .venv/bin/python]
+        priority: checks
+  - repo: https://github.com/renovatebot/pre-commit-hooks
+    rev: 44.65.5
+    hooks:
+      - id: renovate-config-validator
+        priority: checks
+  - repo: builtin
+    hooks:
+      - id: check-symlinks
+        priority: checks
+        groups: [ci]
+      - id: check-yaml
+        priority: checks
+        groups: [ci]
+      - id: end-of-file-fixer
+        priority: format-eof
+        groups: [ci]
+      - id: trailing-whitespace
+        priority: format-trailing-whitespace
+        groups: [ci]
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.30.0
+    hooks:
+      - id: zizmor
+        priority: checks
+        groups: [ci]
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+        priority: checks
+        groups: [ci]

@@ -72,8 +72,8 @@ in the project test suite, provided you enable pytest live logging:
 
     with as many `--extra BACKEND_EXTRA` and / or `--with OTHER_PYTHON_PACKAGE`
     switches as needed to install the desired backends (e.g. `--extra highs`
-    would install the `HIGHS` backend into the uv-managed environment), and 
-    with a `--solver-backend BACKEND` line for each 
+    would install the `HIGHS` backend into the uv-managed environment), and
+    with a `--solver-backend BACKEND` line for each
     [`MILPSolver` member][rummikub_solver.MILPSolver] you want to compare.
 
 The test simulates a full rummikub game between 3 players, playing the game
@@ -104,37 +104,37 @@ selected solver backends: CBC, GLPK_MI, HIGHS, SCIP, SCIPY
 rootdir: /Users/martijn.pieters/Development/oss/rummikub_solver
 configfile: pyproject.toml
 plugins: randomly-3.16.0, cov-6.2.1, hypothesis-6.135.14
-collected 5 items                                                              
+collected 5 items
 
-tests/test_full_game.py::test_full_game[SCIPY] 
+tests/test_full_game.py::test_full_game[SCIPY]
 -------------------------------- live log call ---------------------------------
 INFO     root:test_full_game.py:119 After 16 rounds, player 3 won the game
 INFO     root:test_full_game.py:127 SCIPY solving stats across 35 calls:
   Time (mean ± δ):      16.6 ms ±   9.5 ms
   Range (min … max):     7.7 ms …  51.8 ms)
 PASSED                                                                   [ 20%]
-tests/test_full_game.py::test_full_game[GLPK_MI] 
+tests/test_full_game.py::test_full_game[GLPK_MI]
 -------------------------------- live log call ---------------------------------
 INFO     root:test_full_game.py:119 After 16 rounds, player 3 won the game
 INFO     root:test_full_game.py:127 GLPK_MI solving stats across 36 calls:
   Time (mean ± δ):       2.8 ms ±   1.4 ms
   Range (min … max):     1.2 ms …   6.3 ms)
 PASSED                                                                   [ 40%]
-tests/test_full_game.py::test_full_game[HIGHS] 
+tests/test_full_game.py::test_full_game[HIGHS]
 -------------------------------- live log call ---------------------------------
 INFO     root:test_full_game.py:119 After 17 rounds, player 2 won the game
 INFO     root:test_full_game.py:127 HIGHS solving stats across 37 calls:
   Time (mean ± δ):      12.0 ms ±   8.2 ms
   Range (min … max):     2.2 ms …  29.4 ms)
 PASSED                                                                   [ 60%]
-tests/test_full_game.py::test_full_game[CBC] 
+tests/test_full_game.py::test_full_game[CBC]
 -------------------------------- live log call ---------------------------------
 INFO     root:test_full_game.py:119 After 10 rounds, player 3 won the game
 INFO     root:test_full_game.py:127 CBC solving stats across 17 calls:
   Time (mean ± δ):       8.6 ms ±   4.5 ms
   Range (min … max):     5.6 ms …  21.1 ms)
 PASSED                                                                   [ 80%]
-tests/test_full_game.py::test_full_game[SCIP] 
+tests/test_full_game.py::test_full_game[SCIP]
 -------------------------------- live log call ---------------------------------
 INFO     root:test_full_game.py:119 After 17 rounds, player 1 won the game
 INFO     root:test_full_game.py:127 SCIP solving stats across 37 calls:

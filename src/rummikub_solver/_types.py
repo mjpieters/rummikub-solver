@@ -95,7 +95,7 @@ class ProposedSolution(NamedTuple):
     """What sets to form with rack tiles combined with table tiles"""
     free_jokers: int = 0
     """Number of free jokers on the table.
-    
+
     If this value is non-zero, the jokers where free to begin with and the
     solver was not able to find a better solution that utilised these jokers.
 
@@ -116,9 +116,9 @@ class TableArrangement(NamedTuple):
 
     sets: Sequence[tuple[Tile, ...]]
     """Table sets
-    
+
     This is one possible arrangement of the tiles present on the table.
-    
+
     """
     free_jokers: int
     """Number of free jokers on the table"""
