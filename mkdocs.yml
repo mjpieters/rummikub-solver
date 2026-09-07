@@ -43,7 +43,7 @@ theme:
       media: "(prefers-color-scheme: light)"
       primary: orange
       toggle:
-        icon: material/brightness-7 
+        icon: material/brightness-7
         name: Switch to dark mode
 
     # Palette toggle for dark mode

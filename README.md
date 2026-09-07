@@ -115,7 +115,7 @@ $ task --list
 task: Available tasks for this project:
 * default:                     Default task, runs linters and tests
 * dev:format:                  Runs formatters      (aliases: format)
-* dev:install-precommit:       Install pre-commit into local git checkout
+* dev:install-prek:            Install prek into local git checkout
 * dev:lint:                    Runs linters      (aliases: lint)
 * dev:lint:code:               Lint the source code
 * dev:lint:renovate:           Lint the Renovate configuration file
