@@ -13,7 +13,7 @@ priorities:
 
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.12.11
+    rev: 0.12.12
     hooks:
       - id: uv-lock
         priority: setup
@@ -28,13 +28,13 @@ repos:
       - id: ruff-check
         priority: checks
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.411
+    rev: v1.1.413
     hooks:
       - id: pyright
         args: [--pythonpath, .venv/bin/python]
         priority: checks
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 44.69.12
+    rev: 44.74.0
     hooks:
       - id: renovate-config-validator
         priority: checks
@@ -53,7 +53,7 @@ repos:
         priority: format-trailing-whitespace
         groups: [ci]
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.30.0
+    rev: v1.30.1
     hooks:
       - id: zizmor
         priority: checks
