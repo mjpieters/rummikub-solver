@@ -13,14 +13,14 @@ priorities:
 
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.12.12
+    rev: 0.12.13
     hooks:
       - id: uv-lock
         priority: setup
       - id: uv-sync
         priority: setup
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.6
+    rev: v0.16.7
     hooks:
       - id: ruff-format
         types_or: [python, pyi, jupyter, markdown]
@@ -28,13 +28,13 @@ repos:
       - id: ruff-check
         priority: checks
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.413
+    rev: v1.1.414
     hooks:
       - id: pyright
         args: [--pythonpath, .venv/bin/python]
         priority: checks
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 44.74.0
+    rev: 44.79.2
     hooks:
       - id: renovate-config-validator
         priority: checks
